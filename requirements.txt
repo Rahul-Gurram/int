@@ -1,0 +1,7 @@
+flask
+pandas
+gunicorn == 20.0.4
+scikit-learn
+numpy
+pillow
+requests
