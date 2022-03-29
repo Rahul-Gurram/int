@@ -18,12 +18,12 @@ def main():
     
     if flask.request.method == 'POST':
         # Extract the input
-        age = flask.request.form['age']
-        sex = flask.request.form['sex']
-        bmi = flask.request.form['bmi']
-        children = flask.request.form['children']
-        smoker = flask.request.form['smoker']
-        region = flask.request.form['region']
+        age = flask.request.form.get['age']
+        sex = flask.request.form.get['sex']
+        bmi = flask.request.form.get['bmi']
+        children = flask.request.form.get['children']
+        smoker = flask.request.form.get['smoker']
+        region = flask.request.form.get['region']
 
         # Make DataFrame for model
         input_variables = pd.DataFrame([[age, sex, bmi, children, smoker, region]],
@@ -46,4 +46,4 @@ def main():
                                      )
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0", port=8080)
