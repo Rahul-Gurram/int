@@ -21,7 +21,6 @@ def main():
     
     if flask.request.method == 'POST':
         # Extract the input
-        str(request.form['cropname'])
         age = int(request.form['age'])
         sex = str(request.form['sex'])
         bmi = int(request.form['bmi'])
