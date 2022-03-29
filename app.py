@@ -1,6 +1,9 @@
 import flask
-import pickle
+from flask import Flask, render_template, request, Markup
+import numpy as np
 import pandas as pd
+import requests
+import pickle
 
 # Use pickle to load in the pre-trained model
 with open(f'model/Insurance.pkl', 'rb') as f:
@@ -12,18 +15,19 @@ app = flask.Flask(__name__, template_folder='templates')
 # Set up the main route
 @app.route('/', methods=['GET', 'POST'])
 def main():
-    if flask.request.method == 'GET':
+    if flask.request.method == 'get':
         # Just render the initial form, to get input
         return(flask.render_template('main.html'))
     
     if flask.request.method == 'POST':
         # Extract the input
-        age = flask.request.form.get['age']
-        sex = flask.request.form.get['sex']
-        bmi = flask.request.form.get['bmi']
-        children = flask.request.form.get['children']
-        smoker = flask.request.form.get['smoker']
-        region = flask.request.form.get['region']
+        str(request.form['cropname'])
+        age = int(request.form['age'])
+        sex = str(request.form['sex'])
+        bmi = int(request.form['bmi'])
+        children = int(request.form['children'])
+        smoker = str(request.form['smoker'])
+        region = str(request.form['region'])
 
         # Make DataFrame for model
         input_variables = pd.DataFrame([[age, sex, bmi, children, smoker, region]],
@@ -31,7 +35,7 @@ def main():
                                        index=['input'])
 
         # Get the model's prediction
-        prediction = model.predict(input_variables)[0]
+        prediction = model.predict(input_variables)
     
         # Render the form again, but add in the prediction and remind user
         # of the values they input before
