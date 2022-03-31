@@ -4,22 +4,26 @@ import numpy as np
 import pandas as pd
 import pickle
 
+
+# Use pickle to load in the pre-trained model
+with open(f'model/Insurance.pkl', 'rb') as f:
+    model = pickle.load(f)
+
 # Initialise the Flask app
-app = flask.Flask(__name__, template_folder='templates')
+app = flask.Flask(__name__)
+
+# Define html file to get user input
+@app.route('/')
+def home():
+    return render_template('main.html')
 
 # prediction function
-def ValuePredictor(to_predict_list):
-    to_predict = np.array(to_predict_list).reshape(1, 12)
-    loaded_model = pickle.load(open(f'model/Insurance.pkl', "rb"))
-    result = loaded_model.predict(to_predict)
-    return result[0]
- 
-@app.route('/', methods = ['POST'])
-def result():
-    if request.method == 'POST':
-        to_predict_list = request.form.to_dict()
-        to_predict_list = list(to_predict_list.values())
-        to_predict_list = list(map(int, to_predict_list))
-        result = ValuePredictor(to_predict_list)       
-        return render_template("main.html", prediction = result)
+@app.route('/predict', methods = ['POST'])
+def predict(to_predict):
+    features = np.array(to_predict).reshape(1, 6)
+    results = model.predict(features)
+    return render_template("main.html", prediction = results)
 
+# main function
+if __name__ == '__main__':
+    app.run()
